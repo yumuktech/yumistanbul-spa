@@ -364,6 +364,30 @@ Deploy `dist/` to any static host:
 - Netlify
 - Cloudflare Pages
 - AWS S3 + CloudFront
+### Vercel Quick Start
+
+1. Fork or push the repository to GitHub (already done).
+2. In Vercel dashboard: "Add New" → "Project" → Import `yumuktech/yumistanbul-spa`.
+3. Framework preset: select "Other" (Vite) if not auto-detected.
+4. Set Build Command: `npm run build` and Output Directory: `dist`.
+5. Add Environment Variable (optional for production API):
+   - `VITE_API_BASE_URL=https://api.yumistanbul.com/v1`
+6. Deploy. Vercel will run the build and serve `dist`.
+
+Rewrites: SPA fallback is handled via `vercel.json` route sending all paths to `index.html`.
+
+### Environment Variables on Vercel
+In the project settings → Environment Variables add:
+
+| Name | Value | Environments |
+|------|-------|--------------|
+| VITE_API_BASE_URL | https://api.yumistanbul.com/v1 | Production / Preview |
+
+Local development can override via `.env.local`:
+```
+VITE_API_BASE_URL=http://localhost:8000/api
+```
+
 
 **Environment Variables:**
 ```
