@@ -150,10 +150,13 @@ const App: React.FC = () => {
               borderRadius: '8px'
             }}>
               <p style={{ color: '#c00', fontSize: '18px', marginBottom: '8px' }}>
-                Oops! Something went wrong
+                🍴 Backend API Not Available
               </p>
-              <p style={{ color: '#666' }}>
-                {restaurantsState.error?.message}
+              <p style={{ color: '#666', marginBottom: '16px' }}>
+                The restaurant API isn't deployed yet. This is normal during development!
+              </p>
+              <p style={{ fontSize: '14px', color: '#888' }}>
+                Once the backend at <code style={{ background: '#f5f5f5', padding: '2px 6px', borderRadius: '4px' }}>api.yumistanbul.com/v1</code> is live, restaurants will appear here.
               </p>
             </div>
           )}
