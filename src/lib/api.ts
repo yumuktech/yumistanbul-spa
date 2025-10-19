@@ -84,7 +84,10 @@ import { successState, errorState } from '../data/schemas';
     requiresAuth?: boolean;
   }
 
-  const DEFAULT_BASE_URL = 'http://localhost:8000/api';
+  // Local dev default; in production we prefer relative '/api' so a reverse proxy can be used
+  const DEFAULT_BASE_URL = (typeof window !== 'undefined' && window.location.hostname !== 'localhost')
+    ? '/api'
+    : 'http://localhost:8000/api';
 
   /**
    * Lightweight API client that speaks to the Django BFF.
@@ -556,6 +559,7 @@ import { successState, errorState } from '../data/schemas';
 
     private async request<T>(path: string, init: RequestInit = {}, options: RequestOptions = {}): Promise<T> {
       const url = this.buildUrl(path);
+      const start = performance.now?.() ?? Date.now();
       const headers = new Headers(init.headers ?? {});
 
       if (!headers.has('Accept')) {
@@ -573,10 +577,17 @@ import { successState, errorState } from '../data/schemas';
         headers.set('Authorization', `Bearer ${this.authToken}`);
       }
 
-      const response = await fetch(url, {
-        ...init,
-        headers,
-      });
+      let response: Response;
+      try {
+        response = await fetch(url, {
+          ...init,
+          headers,
+        });
+      } catch (networkError) {
+        const duration = (performance.now?.() ?? Date.now()) - start;
+        console.error('[API][network-error]', { url, duration, error: networkError });
+        throw networkError;
+      }
 
       if (!response.ok) {
         let message = `Request failed with status ${response.status}`;
@@ -594,6 +605,8 @@ import { successState, errorState } from '../data/schemas';
           }
         }
 
+        const duration = (performance.now?.() ?? Date.now()) - start;
+        console.error('[API][error]', { url, status: response.status, message, duration });
         throw new Error(message);
       }
 
@@ -601,7 +614,16 @@ import { successState, errorState } from '../data/schemas';
         return undefined as T;
       }
 
-      return response.json() as Promise<T>;
+      try {
+        const data = await response.json() as T;
+        const duration = (performance.now?.() ?? Date.now()) - start;
+        console.debug('[API][ok]', { url, duration });
+        return data;
+      } catch (parseErr) {
+        const duration = (performance.now?.() ?? Date.now()) - start;
+        console.error('[API][parse-error]', { url, duration, error: parseErr });
+        throw parseErr;
+      }
     }
   }
 
