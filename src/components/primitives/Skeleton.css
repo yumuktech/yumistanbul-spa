@@ -1,0 +1,42 @@
+/* Skeleton Component Styles */
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--color-bg-secondary) 0%,
+    var(--color-bg-tertiary) 50%,
+    var(--color-bg-secondary) 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Variant: Text */
+.skeleton--text {
+  height: 1em;
+  border-radius: var(--border-radius-sm);
+  transform: scale(1, 0.8);
+}
+
+.skeleton--text:not(:last-child) {
+  margin-bottom: 0.5em;
+}
+
+/* Variant: Circular */
+.skeleton--circular {
+  border-radius: 50%;
+}
+
+/* Variant: Rectangular */
+.skeleton--rectangular {
+  border-radius: var(--border-radius-md);
+}

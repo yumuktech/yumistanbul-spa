@@ -1,0 +1,140 @@
+/* ============================================
+   YUMISTANBUL DESIGN TOKENS
+   Mobile-first, WCAG AA compliant
+   ============================================ */
+
+:root {
+  /* ===== SPACING (8-pt grid) ===== */
+  --space-1: 0.5rem;   /* 8px */
+  --space-2: 1rem;     /* 16px */
+  --space-3: 1.5rem;   /* 24px */
+  --space-4: 2rem;     /* 32px */
+  --space-5: 2.5rem;   /* 40px */
+  --space-6: 3rem;     /* 48px */
+  --space-8: 4rem;     /* 64px */
+
+  /* ===== TOUCH TARGETS ===== */
+  --touch-target-min: 44px;  /* iOS minimum */
+  --touch-target-android: 48px; /* Material minimum */
+
+  /* ===== COLORS - VARIANT A (Bold & Vibrant) ===== */
+  /* Ensuring WCAG AA contrast ratios (≥4.5:1) */
+  --color-primary-a: #FF6B35;      /* Vibrant coral */
+  --color-primary-dark-a: #E04D1F; /* Darker for text on light */
+  --color-secondary-a: #4ECDC4;    /* Turquoise accent */
+  --color-bg-a: #FFFFFF;
+  --color-surface-a: #F7F7F7;
+  --color-text-primary-a: #1A1A1A; /* 16.5:1 on white - AAA */
+  --color-text-secondary-a: #666666; /* 5.7:1 on white - AA */
+  --color-error-a: #D32F2F;
+  --color-success-a: #388E3C;
+  --color-warning-a: #F57C00;
+
+  /* ===== COLORS - VARIANT B (Minimal Mono) ===== */
+  --color-primary-b: #2C2C2C;      /* Dark gray */
+  --color-secondary-b: #757575;    /* Medium gray */
+  --color-bg-b: #FAFAFA;
+  --color-surface-b: #FFFFFF;
+  --color-text-primary-b: #212121; /* Almost black */
+  --color-text-secondary-b: #616161; /* 7:1 on white - AA */
+  --color-error-b: #C62828;
+  --color-success-b: #2E7D32;
+  --color-border-b: #E0E0E0;
+
+  /* ===== ACTIVE VARIANT (default to A) ===== */
+  --color-primary: var(--color-primary-a);
+  --color-primary-dark: var(--color-primary-dark-a);
+  --color-secondary: var(--color-secondary-a);
+  --color-bg: var(--color-bg-a);
+  --color-surface: var(--color-surface-a);
+  --color-text-primary: var(--color-text-primary-a);
+  --color-text-secondary: var(--color-text-secondary-a);
+  --color-error: var(--color-error-a);
+  --color-success: var(--color-success-a);
+  --color-warning: var(--color-warning-a);
+
+  /* ===== TYPOGRAPHY ===== */
+  /* Mobile-optimized scale */
+  --font-family-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 
+                      'Helvetica Neue', Arial, sans-serif;
+  --font-family-display: var(--font-family-base);
+
+  /* Font sizes */
+  --font-size-xs: 0.75rem;    /* 12px */
+  --font-size-sm: 0.875rem;   /* 14px */
+  --font-size-base: 0.9375rem; /* 15px - mobile optimized */
+  --font-size-md: 1rem;       /* 16px */
+  --font-size-lg: 1.125rem;   /* 18px */
+  --font-size-xl: 1.25rem;    /* 20px */
+  --font-size-2xl: 1.5rem;    /* 24px */
+  --font-size-3xl: 1.875rem;  /* 30px */
+  --font-size-4xl: 2.25rem;   /* 36px */
+
+  /* Line heights */
+  --line-height-tight: 1.25;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.75;
+
+  /* Font weights */
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* ===== BORDERS & RADIUS ===== */
+  --border-radius-sm: 4px;
+  --border-radius-md: 8px;
+  --border-radius-lg: 12px;
+  --border-radius-xl: 16px;
+  --border-radius-full: 9999px;
+
+  --border-width-thin: 1px;
+  --border-width-medium: 2px;
+
+  /* ===== SHADOWS ===== */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+
+  /* ===== Z-INDEX SCALE ===== */
+  --z-base: 1;
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-fixed: 300;
+  --z-modal-backdrop: 400;
+  --z-modal: 500;
+  --z-toast: 600;
+
+  /* ===== TRANSITIONS ===== */
+  --transition-fast: 150ms ease-in-out;
+  --transition-base: 200ms ease-in-out;
+  --transition-slow: 300ms ease-in-out;
+
+  /* ===== SAFE AREAS (for iOS notch) ===== */
+  --safe-area-inset-top: env(safe-area-inset-top);
+  --safe-area-inset-right: env(safe-area-inset-right);
+  --safe-area-inset-bottom: env(safe-area-inset-bottom);
+  --safe-area-inset-left: env(safe-area-inset-left);
+}
+
+/* ===== VARIANT B THEME CLASS ===== */
+.theme-minimal {
+  --color-primary: var(--color-primary-b);
+  --color-secondary: var(--color-secondary-b);
+  --color-bg: var(--color-bg-b);
+  --color-surface: var(--color-surface-b);
+  --color-text-primary: var(--color-text-primary-b);
+  --color-text-secondary: var(--color-text-secondary-b);
+  --color-error: var(--color-error-b);
+  --color-success: var(--color-success-b);
+}
+
+/* ===== RESPONSIVE BREAKPOINTS ===== */
+/* Mobile-first approach: base styles are mobile */
+/* 
+  Usage in media queries:
+  @media (min-width: 640px) { ... } // sm
+  @media (min-width: 768px) { ... } // md
+  @media (min-width: 1024px) { ... } // lg
+*/

@@ -1,0 +1,125 @@
+/* Chip Component Styles */
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  border-radius: var(--border-radius-full);
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  line-height: 1;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+  user-select: none;
+}
+
+/* Size variants */
+.chip--sm {
+  min-height: var(--touch-target-min);
+  padding: 0 var(--space-2);
+  font-size: var(--font-size-xs);
+}
+
+.chip--md {
+  min-height: var(--touch-target-min);
+  padding: 0 var(--space-3);
+}
+
+.chip--lg {
+  min-height: var(--touch-target-android);
+  padding: 0 var(--space-4);
+  font-size: var(--font-size-base);
+}
+
+/* Interactive state */
+.chip--interactive {
+  cursor: pointer;
+}
+
+.chip--interactive:hover:not(.chip--disabled) {
+  background: var(--color-bg-secondary);
+  border-color: var(--color-primary-a);
+}
+
+.chip--interactive:focus-visible {
+  outline: 2px solid var(--color-primary-a);
+  outline-offset: 2px;
+}
+
+.chip--interactive:active:not(.chip--disabled) {
+  transform: scale(0.98);
+}
+
+/* Selected state */
+.chip--selected {
+  background: var(--color-primary-a);
+  color: #ffffff;
+  border-color: var(--color-primary-a);
+}
+
+.chip--selected:hover:not(.chip--disabled) {
+  background: var(--color-primary-a-dark);
+  border-color: var(--color-primary-a-dark);
+}
+
+/* Variant: Tag (non-interactive) */
+.chip--tag {
+  background: var(--color-bg-secondary);
+  border-color: transparent;
+  pointer-events: none;
+}
+
+/* Disabled state */
+.chip--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Icon */
+.chip__icon {
+  display: flex;
+  align-items: center;
+  font-size: 1.2em;
+}
+
+/* Remove button */
+.chip__remove {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  margin-left: var(--space-1);
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: currentColor;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.chip__remove:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.chip--selected .chip__remove:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Mobile touch optimization */
+@media (hover: none) and (pointer: coarse) {
+  .chip--interactive:active:not(.chip--disabled) {
+    background: var(--color-bg-secondary);
+  }
+  
+  .chip--selected:active:not(.chip--disabled) {
+    background: var(--color-primary-a-dark);
+  }
+}

@@ -1,0 +1,200 @@
+/* RestaurantDetail Component Styles */
+
+.restaurant-detail {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: var(--color-bg-primary);
+}
+
+.restaurant-detail__header {
+  position: sticky;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-bg-primary);
+  border-bottom: 1px solid var(--color-border);
+  z-index: var(--z-sticky);
+}
+
+.restaurant-detail__header-actions {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.restaurant-detail__carousel {
+  position: relative;
+  width: 100%;
+  height: 400px;
+  background: var(--color-bg-secondary);
+}
+
+.restaurant-detail__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.restaurant-detail__carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.9) !important;
+}
+
+.restaurant-detail__carousel-btn--prev {
+  left: var(--space-3);
+}
+
+.restaurant-detail__carousel-btn--next {
+  right: var(--space-3);
+}
+
+.restaurant-detail__carousel-dots {
+  position: absolute;
+  bottom: var(--space-3);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: var(--space-2);
+}
+
+.restaurant-detail__carousel-dot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.restaurant-detail__carousel-dot--active {
+  width: 24px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.restaurant-detail__content {
+  padding: var(--space-4);
+  max-width: 800px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.restaurant-detail__title-section {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+}
+
+.restaurant-detail__name {
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.restaurant-detail__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-2);
+}
+
+.restaurant-detail__location {
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-6);
+}
+
+.restaurant-detail__section {
+  margin-bottom: var(--space-6);
+}
+
+.restaurant-detail__section-title {
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin: 0 0 var(--space-3) 0;
+}
+
+.restaurant-detail__description {
+  font-size: var(--font-size-base);
+  line-height: 1.6;
+  color: var(--color-text-secondary);
+}
+
+.restaurant-detail__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.restaurant-detail__features {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--space-2);
+}
+
+.restaurant-detail__feature {
+  padding: var(--space-3);
+  background: var(--color-bg-secondary);
+  border-radius: var(--border-radius-md);
+  font-size: var(--font-size-base);
+  color: var(--color-text-primary);
+}
+
+.restaurant-detail__contact {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
+}
+
+.restaurant-detail__contact a {
+  color: var(--color-primary-a);
+  text-decoration: none;
+}
+
+.restaurant-detail__contact a:hover {
+  text-decoration: underline;
+}
+
+.restaurant-detail__similar {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-4);
+}
+
+.restaurant-detail__skeleton,
+.restaurant-detail__error {
+  padding: var(--space-4);
+}
+
+.restaurant-detail__error {
+  text-align: center;
+  color: var(--color-text-secondary);
+}
+
+/* Mobile optimization */
+@media (max-width: 768px) {
+  .restaurant-detail__carousel {
+    height: 300px;
+  }
+
+  .restaurant-detail__name {
+    font-size: var(--font-size-xl);
+  }
+
+  .restaurant-detail__similar {
+    grid-template-columns: 1fr;
+  }
+}

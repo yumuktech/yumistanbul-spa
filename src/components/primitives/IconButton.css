@@ -1,0 +1,97 @@
+/* IconButton Component Styles */
+
+.icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: var(--border-radius-md);
+  background: transparent;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-lg);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  user-select: none;
+}
+
+/* Size variants - all meet touch target minimums */
+.icon-button--sm {
+  min-width: var(--touch-target-min);
+  min-height: var(--touch-target-min);
+  font-size: var(--font-size-base);
+}
+
+.icon-button--md {
+  min-width: var(--touch-target-android);
+  min-height: var(--touch-target-android);
+  font-size: var(--font-size-lg);
+}
+
+.icon-button--lg {
+  min-width: 56px;
+  min-height: 56px;
+  font-size: var(--font-size-xl);
+}
+
+/* Variant: Default */
+.icon-button--default:hover:not(.icon-button--disabled) {
+  background: var(--color-bg-secondary);
+}
+
+.icon-button--default:active:not(.icon-button--disabled) {
+  background: var(--color-bg-tertiary);
+}
+
+/* Variant: Primary */
+.icon-button--primary {
+  background: var(--color-primary-a);
+  color: #ffffff;
+}
+
+.icon-button--primary:hover:not(.icon-button--disabled) {
+  background: var(--color-primary-a-dark);
+}
+
+.icon-button--primary:active:not(.icon-button--disabled) {
+  background: var(--color-primary-a-dark);
+  transform: scale(0.95);
+}
+
+/* Variant: Ghost */
+.icon-button--ghost {
+  color: var(--color-text-secondary);
+}
+
+.icon-button--ghost:hover:not(.icon-button--disabled) {
+  color: var(--color-text-primary);
+  background: var(--color-bg-secondary);
+}
+
+/* Focus state */
+.icon-button:focus-visible {
+  outline: 2px solid var(--color-primary-a);
+  outline-offset: 2px;
+}
+
+/* Disabled state */
+.icon-button--disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Icon */
+.icon-button__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+/* Mobile touch optimization */
+@media (hover: none) and (pointer: coarse) {
+  .icon-button:active:not(.icon-button--disabled) {
+    transform: scale(0.95);
+  }
+}

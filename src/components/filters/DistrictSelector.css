@@ -1,0 +1,41 @@
+/* DistrictSelector Component Styles */
+
+.district-selector {
+  margin: 0 calc(-1 * var(--space-4));
+}
+
+.district-selector__scroll {
+  display: flex;
+  gap: var(--space-2);
+  padding: 0 var(--space-4);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; /* Firefox */
+}
+
+.district-selector__scroll::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
+}
+
+/* Scroll hint shadows */
+.district-selector__scroll::before,
+.district-selector__scroll::after {
+  content: '';
+  position: sticky;
+  display: block;
+  width: 24px;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.district-selector__scroll::before {
+  left: 0;
+  background: linear-gradient(to right, var(--color-bg-primary), transparent);
+}
+
+.district-selector__scroll::after {
+  right: 0;
+  background: linear-gradient(to left, var(--color-bg-primary), transparent);
+  margin-left: auto;
+}

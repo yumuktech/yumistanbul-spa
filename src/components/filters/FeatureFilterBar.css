@@ -1,0 +1,88 @@
+.feature-filter-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px 12px 4px;
+  background: var(--color-bg-secondary);
+  border-radius: var(--border-radius-lg);
+}
+
+.feature-filter-bar__features {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.feature-chip {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 4px;
+  background: var(--color-bg-primary);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--border-radius-md);
+  font-size: 12px;
+  cursor: pointer;
+  transition: background var(--transition-fast), border-color var(--transition-fast);
+}
+
+.feature-chip--active {
+  background: var(--color-primary-a);
+  color: #fff;
+  border-color: var(--color-primary-a);
+}
+
+.feature-chip:focus-visible {
+  outline: 2px solid var(--color-primary-a);
+  outline-offset: 2px;
+}
+
+.feature-chip__label {
+  font-weight: 600;
+}
+
+.feature-filter-bar__districts {
+  overflow: hidden;
+}
+
+.district-scroll {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 6px;
+  scrollbar-width: none;
+}
+.district-scroll::-webkit-scrollbar { display: none; }
+
+.district-chip {
+  flex: 0 0 auto;
+  padding: 8px 14px;
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.district-chip--active {
+  background: var(--color-primary-a);
+  color: #fff;
+  border-color: var(--color-primary-a);
+}
+
+.district-chip:focus-visible {
+  outline: 2px solid var(--color-primary-a);
+  outline-offset: 2px;
+}
+
+@media (min-width: 640px) {
+  .feature-filter-bar { flex-direction: row; align-items: flex-start; }
+  .feature-filter-bar__features { flex: 0 0 auto; flex-direction: column; }
+  .feature-chip { flex-direction: row; justify-content: flex-start; padding: 10px 12px; }
+  .feature-chip__label { font-size: 14px; }
+  .feature-filter-bar__districts { flex: 1; }
+}
