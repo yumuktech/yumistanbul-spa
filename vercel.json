@@ -1,14 +1,5 @@
 {
   "version": 2,
-  "builds": [
-    { "src": "package.json", "use": "@vercel/static-build" }
-  ],
-  "buildCommand": "npm run build",
-  "outputDirectory": "dist",
-  "framework": "vite",
-  "env": {
-    "VITE_API_BASE_URL": "http://localhost:8000/api"
-  },
   "routes": [
     { "src": "/(.*)", "dest": "/index.html" }
   ]
