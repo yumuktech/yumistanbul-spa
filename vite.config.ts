@@ -31,6 +31,7 @@ export default defineConfig({
     // Optimize for mobile
     target: 'es2015',
     cssCodeSplit: true,
+    sourcemap: true,
   },
   server: {
     port: 3000,
