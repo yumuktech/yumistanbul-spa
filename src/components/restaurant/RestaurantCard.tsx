@@ -18,11 +18,7 @@ export interface RestaurantCardProps {
  * - Alt text on images
  * - Color contrast meets WCAG AA
  */
-export const RestaurantCard: React.FC<RestaurantCardProps> = ({
-  restaurant,
-  onClick,
-  className = '',
-}) => {
+export const RestaurantCard: React.FC<RestaurantCardProps> = ({ restaurant, onClick, className = '' }) => {
   const handleClick = () => {
     if (onClick) {
       onClick();
@@ -44,23 +40,23 @@ export const RestaurantCard: React.FC<RestaurantCardProps> = ({
       tabIndex={onClick ? 0 : undefined}
       role={onClick ? 'button' : undefined}
     >
-      <div className="restaurant-card__content">
-        <div className="restaurant-card__header">
-          <h2 className="restaurant-card__name">{restaurant.name}</h2>
-          <div className="restaurant-card__badges">
-            <span className="badge badge-rating">⭐ {formatRating(restaurant.rating)}</span>
-            <span className="badge badge-price">{formatPriceTier(restaurant.priceTier)}</span>
-          </div>
+      <div className="restaurant-card__header">
+        <h2 className="restaurant-card__name">{restaurant.name}</h2>
+        <div className="restaurant-card__badges">
+          <span className="badge badge-rating">{formatRating(restaurant.rating)}</span>
+          <span className="badge badge-price">{formatPriceTier(restaurant.priceTier)}</span>
         </div>
-        <div className="restaurant-card__district">{restaurant.location.district}</div>
-        <div className="restaurant-card__features">
-          {['alcohol','outdoor','meal','coffee','dessert']
-            .filter(tag => restaurant.tags.includes(tag))
-            .slice(0,3)
-            .map(tag => (
-              <span key={tag} className="restaurant-card__feature" aria-label={tag}>{tag}</span>
-            ))}
-        </div>
+      </div>
+      <div className="restaurant-card__district">{restaurant.location.district}</div>
+      <div className="restaurant-card__features">
+        {['alcohol', 'outdoor', 'dessert', 'meal', 'coffee', 'date-night', 'work-friendly', 'group-friendly']
+          .filter(tag => restaurant.tags.includes(tag))
+          .slice(0, 3)
+          .map(tag => (
+            <span key={tag} className="restaurant-card__feature" aria-label={tag}>
+              {tag.replace('-', ' ')}
+            </span>
+          ))}
       </div>
     </article>
   );

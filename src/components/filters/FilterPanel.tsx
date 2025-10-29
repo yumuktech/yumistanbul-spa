@@ -1,27 +1,24 @@
 import React from 'react';
 import type { District } from '../../data/schemas';
-import { CORE_FEATURES, FeatureIcon, CoreFeature } from './FeatureIcons';
+import {
+  CORE_FEATURES,
+  FeatureIcon,
+  type CoreFeature,
+  SPECIAL_FEATURES,
+  SpecialIcon,
+} from './FeatureIcons';
 import './FilterPanel.css';
 
 export interface FilterPanelProps {
   selectedFeatures: CoreFeature[];
   onToggleFeature: (f: CoreFeature) => void;
   districts: District[];
-  selectedDistrictId: string | null; // radio behavior
+  selectedDistrictId: string | null;
   onSelectDistrict: (id: string | null) => void;
-  additionalFilters: { id: string; label: string; emoji?: string }[]; // dynamic from API
+  additionalFilters: { id: string; label: string; emoji?: string }[];
   selectedAdditional: string[];
   onToggleAdditional: (id: string) => void;
 }
-
-// Removed static ADDITIONAL_FILTERS; now fully dynamic from backend.
-
-const sectionTitleStyle: React.CSSProperties = {
-  fontSize: '15px',
-  fontWeight: 600,
-  margin: '0 0 12px',
-  textAlign: 'center',
-};
 
 export const FilterPanel: React.FC<FilterPanelProps> = ({
   selectedFeatures,
@@ -33,73 +30,82 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
   selectedAdditional,
   onToggleAdditional,
 }) => {
+  const specials = SPECIAL_FEATURES.filter((feature) =>
+    additionalFilters.some((item) => item.id === feature.id),
+  );
+
   return (
-    <div className="filter-panel" aria-label="Filters">
-      {/* Restaurant Features */}
-      <div className="filter-panel__section">
-        <h2 style={sectionTitleStyle}>Restaurant Features</h2>
-        <div className="feature-grid">
-          {CORE_FEATURES.map(f => {
-            const active = selectedFeatures.includes(f.id);
+    <div className="filter-panel" aria-label="Filtreler">
+      <section aria-labelledby="filters-core">
+        <h2 id="filters-core" className="section-heading">
+          Öne Çıkan Filtreler
+        </h2>
+        <div className="feature-icons">
+          {CORE_FEATURES.map((feature) => {
+            const active = selectedFeatures.includes(feature.id);
             return (
               <button
-                key={f.id}
+                key={feature.id}
                 type="button"
-                className={`feature-tile ${active ? 'is-active' : ''}`}
-                onClick={() => onToggleFeature(f.id)}
+                className={`feature-pill ${active ? 'feature-pill--active' : ''}`}
+                onClick={() => onToggleFeature(feature.id)}
                 aria-pressed={active}
               >
-                <FeatureIcon feature={f.id} size={36} aria-hidden />
-                <span className="feature-tile__label">{f.label}</span>
+                <FeatureIcon feature={feature.id} size={32} aria-hidden />
+                <span>{feature.label}</span>
               </button>
             );
           })}
         </div>
-      </div>
+      </section>
 
-      {/* District */}
-      <div className="filter-panel__section">
-        <h2 style={sectionTitleStyle}>District</h2>
-        <div className="chip-row" role="radiogroup" aria-label="District selection">
-          {districts.map(d => {
-            const checked = selectedDistrictId === d.id;
+      <section aria-labelledby="filters-districts">
+        <h2 id="filters-districts" className="section-heading">
+          Semtler
+        </h2>
+        <div className="chip-row" role="radiogroup" aria-label="Semt seçimi">
+          {districts.map((district) => {
+            const checked = selectedDistrictId === district.id;
             return (
               <button
-                key={d.id}
+                key={district.id}
                 type="button"
                 role="radio"
                 aria-checked={checked}
-                className={`chip ${checked ? 'is-active' : ''}`}
-                onClick={() => onSelectDistrict(checked ? null : d.id)}
+                className={`chip ${checked ? 'chip--active' : ''}`}
+                onClick={() => onSelectDistrict(checked ? null : district.id)}
               >
-                {d.name}
+                {district.name}
               </button>
             );
           })}
         </div>
-      </div>
+      </section>
 
-      {/* Additional Filters */}
-      <div className="filter-panel__section">
-        <h2 style={sectionTitleStyle}>Additional Filters</h2>
-        <p className="filter-panel__hint">Find places that are perfect for special occasions, working remotely, or going out with friends</p>
-        <div className="chip-row" role="group" aria-label="Additional filters">
-          {additionalFilters.map(f => {
-            const active = selectedAdditional.includes(f.id);
-            return (
-              <button
-                key={f.id}
-                type="button"
-                className={`chip ${active ? 'is-active' : ''}`}
-                onClick={() => onToggleAdditional(f.id)}
-                aria-pressed={active}
-              >
-                <span aria-hidden>{f.emoji ?? ''}</span> {f.label}
-              </button>
-            );
-          })}
-        </div>
-      </div>
+      {specials.length > 0 && (
+        <section aria-labelledby="filters-special">
+          <h2 id="filters-special" className="section-heading">
+            Özel Alanlar
+          </h2>
+          <div className="feature-icons feature-icons--compact">
+            {specials.map((feature) => {
+              const active = selectedAdditional.includes(feature.id);
+              return (
+                <button
+                  key={feature.id}
+                  type="button"
+                  className={`feature-pill ${active ? 'feature-pill--active' : ''}`}
+                  onClick={() => onToggleAdditional(feature.id)}
+                  aria-pressed={active}
+                >
+                  <SpecialIcon feature={feature.id} size={28} aria-hidden />
+                  <span>{feature.label}</span>
+                </button>
+              );
+            })}
+          </div>
+        </section>
+      )}
     </div>
   );
 };

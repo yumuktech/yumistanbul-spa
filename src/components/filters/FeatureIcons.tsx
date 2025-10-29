@@ -1,127 +1,264 @@
 import React from 'react';
 
-// Minimal cartoon-like inline SVG icons (no external assets) keeping bundle tiny.
-// Each icon is a 24x24 viewBox with rounded shapes and flat colors for a playful feel.
+export type CoreFeature = 'alcohol' | 'outdoor' | 'dessert' | 'meal' | 'coffee';
+export type SpecialFeature = 'date-night' | 'work-friendly' | 'group-friendly';
 
-export type CoreFeature = 'alcohol' | 'outdoor' | 'meal' | 'coffee' | 'dessert';
-
-interface FeatureIconProps {
-  feature: CoreFeature;
+interface GlyphProps {
   size?: number;
   className?: string;
   'aria-hidden'?: boolean;
 }
 
-const AlcoholIcon: React.FC<{ size: number; className?: string }> = ({ size, className }) => (
+const strokeColor = '#1f2329';
+const accentColor = '#ff3b30';
+
+const createSvg = (path: React.ReactNode, size = 32, className?: string, ariaHidden?: boolean) => (
   <svg
     width={size}
     height={size}
-    viewBox="0 0 24 24"
+    viewBox="0 0 32 32"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
     className={className}
-    role="img"
-    aria-label="Alcohol"
+    role={ariaHidden ? 'presentation' : 'img'}
+    aria-hidden={ariaHidden}
   >
-    <rect x="6" y="2" width="12" height="6" rx="2" fill="#FFC94D" stroke="#C88000" strokeWidth="1.5" />
-    <path d="M9 8h6v9.5a3.5 3.5 0 1 1-6 0V8Z" fill="#FFE6A3" stroke="#C88000" strokeWidth="1.5" />
-    <circle cx="12" cy="17.5" r="1.5" fill="#FFC94D" />
+    {path}
   </svg>
 );
 
-const OutdoorIcon: React.FC<{ size: number; className?: string }> = ({ size, className }) => (
-  <svg
-    width={size}
-    height={size}
-    viewBox="0 0 24 24"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    className={className}
-    role="img"
-    aria-label="Outdoor"
-  >
-    <circle cx="8" cy="14" r="4" fill="#6CC24A" stroke="#2F7D32" strokeWidth="1.5" />
-    <rect x="7.25" y="10" width="1.5" height="8" fill="#2F7D32" />
-    <path d="M2 21h20" stroke="#2F7D32" strokeWidth="1.5" strokeLinecap="round" />
-    <circle cx="16" cy="8" r="5" fill="#A5D86A" stroke="#2F7D32" strokeWidth="1.5" />
-    <rect x="15.25" y="3" width="1.5" height="10" fill="#2F7D32" />
-  </svg>
-);
+const Alcohol: React.FC<GlyphProps> = ({ size = 32, className, 'aria-hidden': ariaHidden }) =>
+  createSvg(
+    <>
+      <path
+        d="M9 3.5h14v3c0 3.866-3.134 7-7 7s-7-3.134-7-7v-3Z"
+        stroke={strokeColor}
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M16 13.5v8M12 27.5h8"
+        stroke={strokeColor}
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+      <circle cx="16" cy="9.5" r="2" fill={accentColor} opacity="0.15" />
+    </>,
+    size,
+    className,
+    ariaHidden
+  );
 
-const MealIcon: React.FC<{ size: number; className?: string }> = ({ size, className }) => (
-  <svg
-    width={size}
-    height={size}
-    viewBox="0 0 24 24"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    className={className}
-    role="img"
-    aria-label="Meal"
-  >
-    <rect x="3" y="9" width="18" height="10" rx="2" fill="#FFD7D7" stroke="#CC5C5C" strokeWidth="1.5" />
-    <path d="M7 9V7.5A2.5 2.5 0 0 1 9.5 5H14.5A2.5 2.5 0 0 1 17 7.5V9" stroke="#CC5C5C" strokeWidth="1.5" />
-    <circle cx="12" cy="14" r="2" fill="#FF9F9F" />
-  </svg>
-);
+const Outdoor: React.FC<GlyphProps> = ({ size = 32, className, 'aria-hidden': ariaHidden }) =>
+  createSvg(
+    <>
+      <path
+        d="M16 4.5v15M12 18.5l4 6 4-6"
+        stroke={strokeColor}
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <circle cx="16" cy="9" r="5" stroke={strokeColor} strokeWidth="2" />
+      <path d="M7 27.5h18" stroke={strokeColor} strokeWidth="2" strokeLinecap="round" />
+    </>,
+    size,
+    className,
+    ariaHidden
+  );
 
-const CoffeeIcon: React.FC<{ size: number; className?: string }> = ({ size, className }) => (
-  <svg
-    width={size}
-    height={size}
-    viewBox="0 0 24 24"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    className={className}
-    role="img"
-    aria-label="Coffee"
-  >
-    <rect x="5" y="7" width="12" height="10" rx="3" fill="#C69C6D" stroke="#5B3A1E" strokeWidth="1.5" />
-    <path d="M17 9h2.25A2.75 2.75 0 0 1 22 11.75v.5A2.75 2.75 0 0 1 19.25 15H17" stroke="#5B3A1E" strokeWidth="1.5" />
-    <path d="M9 7c0-.5.2-1 .5-1.5.3-.5.5-1 .5-1.5M13 7c0-.5.2-1 .5-1.5.3-.5.5-1 .5-1.5" stroke="#5B3A1E" strokeWidth="1.5" strokeLinecap="round" />
-  </svg>
-);
+const Dessert: React.FC<GlyphProps> = ({ size = 32, className, 'aria-hidden': ariaHidden }) =>
+  createSvg(
+    <>
+      <path
+        d="M9 17.5h14l-1.5 6.5a2 2 0 0 1-1.94 1.5H12.44a2 2 0 0 1-1.94-1.5L9 17.5Z"
+        stroke={strokeColor}
+        strokeWidth="2"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M12 17.5c0-2.5 2-5 4-6 2 1 4 3.5 4 6"
+        stroke={accentColor}
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+      <circle cx="16" cy="21" r="1.5" fill={accentColor} opacity="0.2" />
+    </>,
+    size,
+    className,
+    ariaHidden
+  );
 
-const DessertIcon: React.FC<{ size: number; className?: string }> = ({ size, className }) => (
-  <svg
-    width={size}
-    height={size}
-    viewBox="0 0 24 24"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    className={className}
-    role="img"
-    aria-label="Dessert"
-  >
-    <path d="M5 10h14l-1.5 9a2 2 0 0 1-2 1.7H8.5A2 2 0 0 1 6 19L5 10Z" fill="#FFE1E8" stroke="#D86686" strokeWidth="1.5" />
-    <path d="M9 10c0-2 1.5-4 3-5 1.5 1 3 3 3 5" stroke="#D86686" strokeWidth="1.5" strokeLinecap="round" />
-    <circle cx="12" cy="14" r="2" fill="#FF9FB6" />
-  </svg>
-);
+const Meal: React.FC<GlyphProps> = ({ size = 32, className, 'aria-hidden': ariaHidden }) =>
+  createSvg(
+    <>
+      <rect
+        x="7"
+        y="14"
+        width="18"
+        height="9"
+        rx="2"
+        stroke={strokeColor}
+        strokeWidth="2"
+      />
+      <path
+        d="M12 14v-2a4 4 0 0 1 4-4 4 4 0 0 1 4 4v2"
+        stroke={strokeColor}
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+      <path d="M11 21h10" stroke={accentColor} strokeWidth="2" strokeLinecap="round" />
+    </>,
+    size,
+    className,
+    ariaHidden
+  );
 
-export const FeatureIcon: React.FC<FeatureIconProps> = ({ feature, size = 28, className, ...rest }) => {
+const Coffee: React.FC<GlyphProps> = ({ size = 32, className, 'aria-hidden': ariaHidden }) =>
+  createSvg(
+    <>
+      <rect
+        x="7"
+        y="11"
+        width="14"
+        height="12"
+        rx="3"
+        stroke={strokeColor}
+        strokeWidth="2"
+      />
+      <path
+        d="M21 13h2.5a3.5 3.5 0 0 1 0 7H21"
+        stroke={strokeColor}
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+      <path
+        d="M12 6.5c0 1.5-2 2-2 3.5M16 6.5c0 1.5-2 2-2 3.5"
+        stroke={accentColor}
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+    </>,
+    size,
+    className,
+    ariaHidden
+  );
+
+const DateNight: React.FC<GlyphProps> = ({ size = 28, className, 'aria-hidden': ariaHidden }) =>
+  createSvg(
+    <>
+      <path
+        d="M10 10c0-2.21 1.79-4 4-4 1.62 0 3 1.11 3.6 2.4C18.2 7.11 19.58 6 21.2 6 23.41 6 25.2 7.79 25.2 10c0 4.8-9.2 10-9.2 10S10 14.8 10 10Z"
+        stroke={strokeColor}
+        strokeWidth="2"
+        strokeLinejoin="round"
+      />
+      <path d="M16 20v4" stroke={accentColor} strokeWidth="2" strokeLinecap="round" />
+    </>,
+    size,
+    className,
+    ariaHidden
+  );
+
+const WorkFriendly: React.FC<GlyphProps> = ({ size = 28, className, 'aria-hidden': ariaHidden }) =>
+  createSvg(
+    <>
+      <rect
+        x="9"
+        y="11"
+        width="14"
+        height="12"
+        rx="2"
+        stroke={strokeColor}
+        strokeWidth="2"
+      />
+      <path
+        d="M12 11V9a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
+        stroke={strokeColor}
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+      <path d="M9 16h14" stroke={accentColor} strokeWidth="2" strokeLinecap="round" />
+    </>,
+    size,
+    className,
+    ariaHidden
+  );
+
+const GroupFriendly: React.FC<GlyphProps> = ({ size = 28, className, 'aria-hidden': ariaHidden }) =>
+  createSvg(
+    <>
+      <circle cx="12" cy="11" r="3" stroke={strokeColor} strokeWidth="2" />
+      <circle cx="20" cy="11" r="3" stroke={strokeColor} strokeWidth="2" />
+      <path
+        d="M7 23c0-3 2.5-5.5 5.5-5.5S18 20 18 23"
+        stroke={strokeColor}
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+      <path
+        d="M16.5 17.8A5.5 5.5 0 0 1 22 23"
+        stroke={accentColor}
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+    </>,
+    size,
+    className,
+    ariaHidden
+  );
+
+export const FeatureIcon: React.FC<GlyphProps & { feature: CoreFeature }> = ({
+  feature,
+  size,
+  className,
+  ...rest
+}) => {
   switch (feature) {
     case 'alcohol':
-      return <AlcoholIcon size={size} className={className} {...rest} />;
+      return <Alcohol size={size} className={className} {...rest} />;
     case 'outdoor':
-      return <OutdoorIcon size={size} className={className} {...rest} />;
-    case 'meal':
-      return <MealIcon size={size} className={className} {...rest} />;
-    case 'coffee':
-      return <CoffeeIcon size={size} className={className} {...rest} />;
+      return <Outdoor size={size} className={className} {...rest} />;
     case 'dessert':
-      return <DessertIcon size={size} className={className} {...rest} />;
+      return <Dessert size={size} className={className} {...rest} />;
+    case 'meal':
+      return <Meal size={size} className={className} {...rest} />;
+    case 'coffee':
+      return <Coffee size={size} className={className} {...rest} />;
     default:
       return null;
   }
 };
 
-export const CORE_FEATURES: { id: CoreFeature; label: string }[] = [
+export const SpecialIcon: React.FC<GlyphProps & { feature: SpecialFeature }> = ({
+  feature,
+  size,
+  className,
+  ...rest
+}) => {
+  switch (feature) {
+    case 'date-night':
+      return <DateNight size={size} className={className} {...rest} />;
+    case 'work-friendly':
+      return <WorkFriendly size={size} className={className} {...rest} />;
+    case 'group-friendly':
+      return <GroupFriendly size={size} className={className} {...rest} />;
+    default:
+      return null;
+  }
+};
+
+export const CORE_FEATURES: Array<{ id: CoreFeature; label: string }> = [
   { id: 'alcohol', label: 'Alcohol' },
   { id: 'outdoor', label: 'Outdoor' },
+  { id: 'dessert', label: 'Dessert' },
   { id: 'meal', label: 'Meal' },
   { id: 'coffee', label: 'Coffee' },
-  { id: 'dessert', label: 'Dessert' },
 ];
 
-export default FeatureIcon;
+export const SPECIAL_FEATURES: Array<{ id: SpecialFeature; label: string }> = [
+  { id: 'date-night', label: 'Date Night' },
+  { id: 'work-friendly', label: 'Work Friendly' },
+  { id: 'group-friendly', label: 'Group Friendly' },
+];

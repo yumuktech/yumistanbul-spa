@@ -1,14 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { apiClient } from '../lib/api';
 import type { RestaurantListItem, AsyncState, District, FilterState } from '../data/schemas';
 import { RestaurantCard } from '../components/restaurant';
 import { Skeleton } from '../components/primitives';
 import { FilterPanel } from '../components/filters/FilterPanel';
-import type { CoreFeature } from '../components/filters/FeatureIcons';
+import { SPECIAL_FEATURES, type CoreFeature } from '../components/filters/FeatureIcons';
+import './App.css';
 
 const App: React.FC = () => {
   const [filters, setFilters] = useState<Partial<FilterState>>({
     districts: [], // will keep array internally but enforce single element
+    features: [],
+    special: [],
     sort: 'rating',
   });
   const [selectedDistrictId, setSelectedDistrictId] = useState<string | null>(null);
@@ -59,143 +62,143 @@ const App: React.FC = () => {
 
   const handleSelectDistrict = (districtId: string | null) => {
     setSelectedDistrictId(districtId);
-    setFilters(prev => ({ ...prev, districts: districtId ? [districtId] : [] }));
+    setFilters(prev => ({
+      ...prev,
+      districts: districtId ? [districtId] : [],
+    }));
   };
 
   const handleClearFilters = () => {
-  setFilters({ districts: [], sort: 'rating' });
-  setSelectedDistrictId(null);
+    setFilters({ districts: [], features: [], special: [], sort: 'rating' });
+    setSelectedDistrictId(null);
     setSelectedFeatures([]);
     setSelectedAdditional([]);
   };
 
   const activeFilterCount = (selectedDistrictId ? 1 : 0) + selectedFeatures.length + selectedAdditional.length;
   const handleToggleAdditional = (id: string) => {
-    setSelectedAdditional(prev => prev.includes(id) ? prev.filter(a => a !== id) : [...prev, id]);
+    setSelectedAdditional(prev => {
+      const next = prev.includes(id) ? prev.filter(a => a !== id) : [...prev, id];
+      setFilters(current => ({ ...current, special: next }));
+      return next;
+    });
   };
 
   const handleToggleFeature = (feature: CoreFeature) => {
-    setSelectedFeatures(prev => prev.includes(feature) ? prev.filter(f => f !== feature) : [...prev, feature]);
+    setSelectedFeatures(prev => {
+      const next = prev.includes(feature) ? prev.filter(f => f !== feature) : [...prev, feature];
+      setFilters(current => ({ ...current, features: next }));
+      return next;
+    });
   };
 
-  // Detail View
-  // List View
+  const additionalFiltersToShow = useMemo(() => {
+    const base = SPECIAL_FEATURES.map(({ id, label }) => ({ id, label }));
+    if (!additionalFiltersState.data) {
+      return base;
+    }
+    const info = new Map(additionalFiltersState.data.map(item => [item.id, item]));
+    return SPECIAL_FEATURES.map(({ id, label }) => {
+      const match = info.get(id);
+      return {
+        id,
+        label: match?.label ?? label,
+        emoji: match?.emoji,
+      };
+    });
+  }, [additionalFiltersState.data]);
+
+  const selectedDistrictName = selectedDistrictId && districtsState.data
+    ? districtsState.data.find(district => district.id === selectedDistrictId)?.name ?? null
+    : null;
+
+  const filteredRestaurants: RestaurantListItem[] | null = useMemo(() => {
+    if (restaurantsState.status !== 'success' || !restaurantsState.data) {
+      return null;
+    }
+
+    return restaurantsState.data
+      .filter(r => {
+        const districtOk = !selectedDistrictId || r.location.district.toLowerCase() === selectedDistrictId.toLowerCase();
+        const featureOk = selectedFeatures.length === 0 || selectedFeatures.some(f => r.tags.includes(f));
+        const additionalOk = selectedAdditional.length === 0 || selectedAdditional.some(a => r.tags.includes(a));
+        return districtOk && featureOk && additionalOk;
+      });
+  }, [restaurantsState, selectedDistrictId, selectedFeatures, selectedAdditional]);
+
   return (
-    <div className="app">
+    <div className="app-shell">
       <a href="#main-content" className="skip-link">
         Ana içeriğe atla
       </a>
+      <header className="app-header">
+        <h1 className="app-header__title">Yumistanbul</h1>
+        {activeFilterCount > 0 && (
+          <button type="button" className="link-button" onClick={handleClearFilters}>
+            Filtreleri temizle
+          </button>
+        )}
+      </header>
 
-      <main id="main-content">
-        <div className="container" style={{ padding: '16px', maxWidth: '680px', margin: '0 auto' }}>
-          <header style={{ marginBottom: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <h1 style={{ fontSize: '28px', fontWeight: '700', margin: 0 }}>Yumistanbul</h1>
-            {activeFilterCount > 0 && (
-              <button
-                onClick={handleClearFilters}
-                style={{ background: 'none', border: 'none', color: 'var(--color-primary-a)', fontWeight: 600, cursor: 'pointer' }}
-              >Reset</button>
-            )}
-          </header>
-          {districtsState.status !== 'error' && districtsState.data && additionalFiltersState.data && (
-            <FilterPanel
-              selectedFeatures={selectedFeatures}
-              onToggleFeature={handleToggleFeature}
-              districts={districtsState.data}
-              selectedDistrictId={selectedDistrictId}
-              onSelectDistrict={handleSelectDistrict}
-              additionalFilters={additionalFiltersState.data}
-              selectedAdditional={selectedAdditional}
-              onToggleAdditional={handleToggleAdditional}
-            />
-          )}
+      <main id="main-content" className="app-main">
+        {districtsState.status !== 'error' && districtsState.data && (
+          <FilterPanel
+            selectedFeatures={selectedFeatures}
+            onToggleFeature={handleToggleFeature}
+            districts={districtsState.data}
+            selectedDistrictId={selectedDistrictId}
+            onSelectDistrict={handleSelectDistrict}
+            additionalFilters={additionalFiltersToShow}
+            selectedAdditional={selectedAdditional}
+            onToggleAdditional={handleToggleAdditional}
+          />
+        )}
 
-          {/* Results Count */}
-          {restaurantsState.status === 'success' && restaurantsState.data && (
-            <p style={{ color: 'var(--color-text-secondary)', fontSize: '13px', margin: '12px 0' }}>
-              {restaurantsState.data.length} places
+        {restaurantsState.status === 'loading' && (
+          <div className="results-list" aria-live="polite">
+            {Array.from({ length: 4 }).map((_, index) => (
+              <div key={index} className="loading-card">
+                <Skeleton variant="text" width="40%" height={20} />
+                <div className="loading-card__content">
+                  <Skeleton variant="text" width="60%" height={16} />
+                  <Skeleton variant="text" width="45%" height={16} />
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {restaurantsState.status === 'error' && (
+          <div className="error-state" role="alert">
+            <p className="error-state__title">🍴 Backend API henüz hazır değil</p>
+            <p className="error-state__body">
+              Restoran verileri yayınlandığında sonuçlar burada görünecek.
             </p>
-          )}
+            <span className="error-state__code">api.yumistanbul.com/v1</span>
+          </div>
+        )}
 
-          {/* Loading State */}
-          {restaurantsState.status === 'loading' && (
-            <div style={{ 
-              display: 'grid', 
-              gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-              gap: '24px' 
-            }}>
-              {[...Array(6)].map((_, i) => (
-                <div key={i} style={{ 
-                  border: '1px solid var(--color-border)',
-                  borderRadius: 'var(--border-radius-lg)',
-                  overflow: 'hidden'
-                }}>
-                  <Skeleton variant="rectangular" height={200} />
-                  <div style={{ padding: '16px' }}>
-                    <Skeleton variant="text" width="60%" height={24} />
-                    <Skeleton variant="text" width="40%" />
-                    <Skeleton variant="text" width="100%" />
-                  </div>
-                </div>
-              ))}
+        {restaurantsState.status === 'success' && filteredRestaurants && (
+          <>
+            <div className="results-meta">
+              <span>{filteredRestaurants.length} mekan</span>
+              {selectedDistrictName && <span>{selectedDistrictName}</span>}
             </div>
-          )}
 
-          {/* Error State */}
-          {restaurantsState.status === 'error' && (
-            <div style={{ 
-              padding: '48px', 
-              textAlign: 'center',
-              background: '#fee',
-              borderRadius: '8px'
-            }}>
-              <p style={{ color: '#c00', fontSize: '18px', marginBottom: '8px' }}>
-                🍴 Backend API Not Available
-              </p>
-              <p style={{ color: '#666', marginBottom: '16px' }}>
-                The restaurant API isn't deployed yet. This is normal during development!
-              </p>
-              <p style={{ fontSize: '14px', color: '#888' }}>
-                Once the backend at <code style={{ background: '#f5f5f5', padding: '2px 6px', borderRadius: '4px' }}>api.yumistanbul.com/v1</code> is live, restaurants will appear here.
-              </p>
-            </div>
-          )}
-
-          {/* Restaurant Grid */}
-          {restaurantsState.status === 'success' && restaurantsState.data && (
-            <>
-              {restaurantsState.data.length === 0 ? (
-                <div style={{ 
-                  padding: '48px', 
-                  textAlign: 'center',
-                  color: 'var(--color-text-secondary)'
-                }}>
-                  <p style={{ fontSize: '18px', marginBottom: '8px' }}>
-                    No restaurants found
-                  </p>
-                  <p>Try adjusting your filters</p>
-                </div>
-              ) : (
-                <div style={{ 
-                  display: 'grid', 
-                  gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-                  gap: '24px' 
-                }}>
-                  {restaurantsState.data
-                    .filter(r => {
-                      const districtOk = !selectedDistrictId || r.location.district.toLowerCase() === selectedDistrictId.toLowerCase();
-                      const featureOk = selectedFeatures.length === 0 || selectedFeatures.some(f => r.tags.includes(f));
-                      const additionalOk = selectedAdditional.length === 0 || selectedAdditional.some(a => r.tags.includes(a));
-                      return districtOk && featureOk && additionalOk;
-                    })
-                    .map((restaurant) => (
-                      <RestaurantCard key={restaurant.id} restaurant={restaurant} />
-                    ))}
-                </div>
-              )}
-            </>
-          )}
-        </div>
+            {filteredRestaurants.length === 0 ? (
+              <div className="empty-state">
+                <p className="empty-state__title">Sonuç bulunamadı</p>
+                <p className="empty-state__body">Farklı filtre kombinasyonları dene veya filtreleri sıfırla.</p>
+              </div>
+            ) : (
+              <div className="results-list">
+                {filteredRestaurants.map((restaurant) => (
+                  <RestaurantCard key={restaurant.id} restaurant={restaurant} />
+                ))}
+              </div>
+            )}
+          </>
+        )}
       </main>
     </div>
   );
